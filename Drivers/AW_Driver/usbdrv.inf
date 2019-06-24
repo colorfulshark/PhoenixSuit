@@ -1,0 +1,111 @@
+;-------------------------------------------------------------------------------
+;
+; USBDRV_mulos.Inf - install information file for NT , IA64, AMD64
+; Sam Liu
+; 2010-06-13 
+;
+;
+;-------------------------------------------------------------------------------
+
+
+[Version]
+Signature="$Windows NT$"		;Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+Provider=%USBDRV%
+LayoutFile=layout.inf
+DriverVer=01/24/2013,1.0.0.1
+CatalogFile=usbdrv.cat
+CatalogFile.NTx86=usbdrvX86.cat
+CatalogFile.NTIA64=usbdrvI64.cat
+CatalogFile.NTAMD64=usbdrvX64.cat
+
+[DestinationDirs]				;文件复制目录
+DefaultDestDir=12				;%windir%\system32\drivers
+
+[Manufacturer]
+%USBDRV%=USBDRV,NT,NTia64,NTamd64					;调用model节
+
+[USBDRV.NT]						;model节开始
+%USB\VID_1f3a&PID_efe8.DeviceDesc%=USBDRV.Dev, USB\VID_1f3a&PID_efe8 
+
+
+[USBDRV.NTia64]						;model节开始
+%USB\VID_1f3a&PID_efe8.DeviceDesc%=USBDRV.Dev.NTia64, USB\VID_1f3a&PID_efe8 
+
+[USBDRV.NTamd64]						;model节开始
+%USB\VID_1f3a&PID_efe8.DeviceDesc%=USBDRV.Dev.NTamd64, USB\VID_1f3a&PID_efe8 
+;////////////////////////////////////// For before
+[USBDRV.Dev]					;DDinstall节开始
+CopyFiles=USBDRV.Files.Ext		;调用CopyFiles节
+CopyFiles=USBDRV.Files.Inf		;调用CopyFiles节
+AddReg=LaunchRegSection			;调用AddReg节
+
+[USBDRV.Files.Ext]				;CopyFiles节开始
+USBDrv.sys
+
+[USBDRV.Files.Inf]				;CopyFiles节开始
+USBDrv.inf
+
+
+[USBDRV.Dev.Services]		;DDInstall.Service节开始
+AddService=usbUDisc,2,USBDRV_Service_Inst
+
+
+[USBDRV_Service_Inst]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\USBDrv.sys
+
+;////////////////////////////////////////////////////////For IA64
+[USBDRV.Dev.NTia64]						
+CopyFiles=USBDRV_IA64.Ext		;调用CopyFiles节
+CopyFiles=USBDRV_IA64.Inf		;调用CopyFiles节
+AddReg=LaunchRegSection			;调用AddReg节
+
+[USBDRV_IA64.Ext]				;CopyFiles节开始
+USBDrv_ia64.sys
+
+[USBDRV_IA64.Inf]				;CopyFiles节开始
+USBDrv.inf
+
+[USBDRV.Dev.NTia64.Services]		;DDInstall.Service节开始
+AddService=usbUDisc,2,USBDRV_Service_IA64_Inst
+
+[USBDRV_Service_IA64_Inst]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\USBDrv_ia64.sys
+
+;///////////////////////////////////////////////////For AMD64
+[USBDRV.Dev.NTamd64]						
+CopyFiles=USBDRV_AMD64.Ext		;调用CopyFiles节
+CopyFiles=USBDRV_AMD64.Inf		;调用CopyFiles节
+AddReg=LaunchRegSection			;调用AddReg节
+
+[USBDRV_AMD64.Ext]				;CopyFiles节开始
+USBDrv_AMD64.sys
+
+[USBDRV_AMD64.Inf]				;CopyFiles节开始
+USBDrv.inf
+
+[USBDRV.Dev.NTamd64.Services]		;DDInstall.Service节开始
+AddService=usbUDisc,2,USBDRV_Service_AMD64_Inst
+
+[USBDRV_Service_AMD64_Inst]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\USBDrv_AMD64.sys
+
+;//////////////////////////////////////////////For Common
+[LaunchRegSection]				;AddReg节开始
+HKR, "Parameters","Coordinates",FLG_ADDREG_TYPE_DWORD,0
+
+[Strings]
+USBDRV="USB Devices"
+USB\VID_1f3a&PID_efe8.DeviceDesc="USB Device(VID_1f3a_PID_efe8)" 
+
+
